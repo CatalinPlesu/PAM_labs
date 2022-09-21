@@ -8,21 +8,19 @@ import android.view.View
 import java.util.*
 import kotlin.random.Random
 
-var ddd = -1;
-var mmm = -1;
-var yyy = -1;
+var calendar: Calendar = Calendar.getInstance();
+var mmm = calendar.get(Calendar.MONTH);
+var ddd = calendar.get(Calendar.DATE);
+var yyy = calendar.get(Calendar.YEAR);
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
     }
 
     fun openDatePicker(view: View) {
         var calendar: Calendar = Calendar.getInstance();
-        var calendar2: Calendar = Calendar.getInstance();
         val birthDate = findViewById<TextView>(R.id.textViewBD);
         val age = findViewById<TextView>(R.id.textViewAGE);
 
@@ -47,14 +45,25 @@ class MainActivity : AppCompatActivity() {
                     ddd = 31 - ddd;
                 }
                 if(dd>=cdd && mm >=cmm && yy >= cyy){
-                    ddd = 0; mmm = 0; yyy = 0;
+                    ddd = cdd; mmm = cmm; yyy = cyy;
+                    birthDate.text = "Invalid date"
+                    age.text = "You still haven't been born";
+                }else{
+                 birthDate.text = "Birth date: ${if(dd<10) 0 else ""}$dd.${if(mm+1<10) 0 else ""}${mm+1}.$yy";
+                    age.text = "Your age is: ${yyy} Years; ${mmm} Months; ${ddd} Days";
+                    ddd = dd; mmm = mm; yyy = yy;
                 }
-
-                birthDate.text = "Birth date: ${if(dd<10) 0 else ""}$dd.${if(mm+1<10) 0 else ""}${mm+1}.$yy";
-                age.text = "Your age is: ${yyy} Years; ${mmm} Months; ${ddd} Days";
-
-                ddd = dd; mmm = mm; yyy = yy;
-            }, if(yyy>0) yyy else cyy, if(mmm>0) mmm else cmm, if(ddd > 0) ddd else cdd
+            }, yyy, mmm, ddd
        ).show();
+    }
+
+    fun clearCalendarDate(view: View) {
+        val birthDate = findViewById<TextView>(R.id.textViewBD);
+        val age = findViewById<TextView>(R.id.textViewAGE);
+        birthDate.text = "Birth Date";
+        age.text = "Your age:";
+        yyy = calendar.get(Calendar.YEAR);
+        mmm = calendar.get(Calendar.MONTH);
+        ddd = calendar.get(Calendar.DATE);
     }
 }
