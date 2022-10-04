@@ -66,4 +66,11 @@ class MainActivity : AppCompatActivity() {
         mmm = calendar.get(Calendar.MONTH);
         ddd = calendar.get(Calendar.DATE);
     }
+
+    fun changeWeight(view: View) {
+
+
+        val weight = findViewById<TextView>(R.id.textViewAGE);
+        weight.text = "Your Weight";
+    }
 }
