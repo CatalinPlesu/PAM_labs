@@ -31,6 +31,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String message = "Your age isn't determined";
+  DateTime setDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -50,34 +51,68 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: pickBirthDate,
-        tooltip: 'Pick Date',
-        child: const Icon(Icons.calendar_month_rounded),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      //floatingActionButton: FloatingActionButton(
+      //  onPressed: pickBirthDate,
+      //  tooltip: 'Pick Date',
+      //  child: const Icon(Icons.calendar_month_rounded),
+      //), // This trailing comma makes auto-formatting nicer for build methods.
+
+        floatingActionButton: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                child: Icon(
+                    Icons.refresh
+                ),
+                onPressed: () {
+                  setState(() {
+                    message = "Introduceti varsta";
+                    setDate = DateTime.now();
+                  });
+                  //...
+                },
+                heroTag: null,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              FloatingActionButton(
+                child: Icon(
+                    Icons.calendar_month_rounded
+                ),
+                onPressed: () => pickBirthDate(),
+                heroTag: null,
+              )
+            ]
+        )
+
     );
   }
   Future pickBirthDate() async {
-    DateTime? date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(1900), lastDate: DateTime.now());
-    int d = int.parse(DateFormat("d").format(date!));
-    int m = int.parse(DateFormat("M").format(date!));
-    int y = int.parse(DateFormat("y").format(date!));
+    DateTime? date = await showDatePicker(context: context, initialDate: setDate, firstDate: DateTime(1900), lastDate: DateTime.now());
+    if(date != null){
+      setDate = date;
+    }
+    int d = date!.day;
+    int m = date!.month;
+    int y = date!.year;
 
     DateTime curentDate = DateTime.now();
-    int cd = int.parse(DateFormat("d").format(curentDate));
-    int cm = int.parse(DateFormat("M").format(curentDate));
-    int cy = int.parse(DateFormat("y").format(curentDate));
+    int cd = curentDate.day;
+    int cm = curentDate.month;
+    int cy = curentDate.year;
 
     if(d<=cd){
       d = cd - d;
     }else{
-      d = 31 - d;
+      d = cd - d + 31;
+      cm -= 1;
     };
     if(m<=cm){
       m = cm - m;
     }else{
-      m = 12 - m;
-      y -= 1;
+      m = cm - m + 12;
+      cy -= 1;
     };
     y = cy - y;
 
