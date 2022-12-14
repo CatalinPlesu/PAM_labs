@@ -1,6 +1,9 @@
 import 'package:domain/models/featured.dart';
+import 'package:domain/use_cases/get_articles_from_api_use_case.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lab_4/pages/home/home_controller.dart';
 import 'package:lab_4/resources/custom_collors.dart';
 import 'package:lab_4/resources/text_styles.dart';
 
@@ -10,6 +13,7 @@ class FeaturedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    HomeController controller = Get.find();
     return Container(
       // color: Colors.pink,
       margin: EdgeInsets.only(left: 16, right: 8),
@@ -38,6 +42,8 @@ class FeaturedCard extends StatelessWidget {
               child: Align(
             alignment: Alignment.bottomCenter,
             child: Text(featured.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyles.textStyleSourceSansPro20(color: Colors.white, fontWeight: FontWeight.w600)),
           )),
           Positioned.fill(
@@ -50,6 +56,7 @@ class FeaturedCard extends StatelessWidget {
               height: 36,
               child: TextButton(
                 onPressed: () async {
+                  controller.openArticle(1);
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: CustomColors.geraldine, // Background Color

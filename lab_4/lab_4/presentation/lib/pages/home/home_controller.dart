@@ -4,6 +4,7 @@ import 'package:domain/use_cases/get_featured_from_json_use_case.dart';
 import 'package:domain/use_cases/get_news_from_json_use_case.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lab_4/pages/article/article_page.dart';
 import 'package:lab_4/resources/files.dart';
 
 class HomeController extends GetxController{
@@ -28,6 +29,10 @@ class HomeController extends GetxController{
       return "${(number/1000.0).toStringAsFixed(1)}K";
     }
     return "${number}";
+  }
+
+  void openArticle(int id){
+    Get.to(ArticlePage());
   }
 
 }

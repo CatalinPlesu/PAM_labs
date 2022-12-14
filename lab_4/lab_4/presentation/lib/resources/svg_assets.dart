@@ -33,4 +33,10 @@ class SvgAssets {
     "resources/svg/mark.svg",
     fit: BoxFit.contain,
   );
+
+  static SvgPicture backSvg =
+  SvgPicture.asset(
+    "resources/svg/back.svg",
+    fit: BoxFit.contain,
+  );
 }

@@ -2,6 +2,7 @@ import 'package:di/di.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lab_4/pages/article/article_page.dart';
 import 'package:lab_4/pages/home/home_page.dart';
 import 'package:flutter/services.dart';
 
@@ -22,10 +23,13 @@ class MyApp extends StatelessWidget {
       statusBarBrightness: Brightness.light, //<-- For iOS SEE HERE (dark icons)
     ));
 
+
     return GetMaterialApp(
       title: 'News app',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: const HomePage(),
+      // home: const HomePage(),
+      home: const ArticlePage(),
     );
   }
 }
