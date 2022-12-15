@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lab_4/pages/article/article_controller.dart';
 import 'package:lab_4/pages/home/home_controller.dart';
 import 'package:lab_4/pages/home/widgets/featured/featured.dart';
 import 'package:lab_4/resources/custom_collors.dart';
@@ -15,14 +16,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
+  late ScrollController scrollController;
+
   @override
   void initState() {
-    super.initState();
     if (!Get.isRegistered<HomeController>()) {
       Get.lazyPut(() => HomeController());
     }
     HomeController controller = Get.find();
     controller.readJsonFile();
+    controller.getArticles();
+    if (!Get.isRegistered<ArticleController>()) {
+      Get.lazyPut(() => ArticleController(article: controller.articleList.value[0]));
+    }
+
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      var maxScroll = scrollController.position.maxScrollExtent;
+      var currentScroll = scrollController.position.pixels;
+      if (currentScroll >= maxScroll) {
+        controller.getNextPage();
+      }
+    });
+
+    super.initState();
   }
 
   @override
@@ -32,7 +49,8 @@ class _MyHomePageState extends State<HomePage> {
       color: Colors.white,
       child: Obx(
         () => ListView.builder(
-            itemCount: controller.news.value.length + 1,
+            controller: scrollController,
+            itemCount: controller.articleList.value.length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
                 return Column(
@@ -56,7 +74,7 @@ class _MyHomePageState extends State<HomePage> {
                 );
               } else {
                 // return NewsItem();
-                return NewsItem(news_item: controller.news.value[index - 1]);
+                return NewsItem(article: controller.articleList.value[index - 1]);
               }
             }),
       ),

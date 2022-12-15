@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lab_4/pages/article/article_controller.dart';
+import 'package:lab_4/pages/article/widgets/tag.dart';
 import 'package:lab_4/pages/home/home_page.dart';
 import 'package:lab_4/resources/custom_collors.dart';
 import 'package:lab_4/resources/svg_assets.dart';
@@ -17,9 +19,6 @@ class _MyArticlePageState extends State<ArticlePage> {
   @override
   void initState() {
     super.initState();
-    if (!Get.isRegistered<ArticleController>()) {
-      Get.lazyPut(() => ArticleController());
-    }
     ArticleController controller = Get.find();
   }
 
@@ -47,10 +46,13 @@ class _MyArticlePageState extends State<ArticlePage> {
               margin: EdgeInsets.only(top: 10, left: 17, right: 15),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
-                child: Image(
-                  image: NetworkImage(
-                      "https://media.cnn.com/api/v1/images/stellar/prod/221016100840-02-joe-biden-1011.jpg?c=16x9&q=h_720,w_1280,c_fill"),
+                child:
+
+                CachedNetworkImage(
                   fit: BoxFit.cover,
+                  imageUrl: controller.article.image,
+                  placeholder: (context, url) => new CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => new Icon(Icons.error),
                 ),
               ),
             ),
@@ -75,7 +77,7 @@ class _MyArticlePageState extends State<ArticlePage> {
                     ),
                     margin: EdgeInsets.only(left: 17, right: 18.67),
                     padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                    child: Text("category",
+                    child: Text(controller.article.category.title,
                         style: TextStyles.textStyleSourceSansPro10(
                             color: CustomColors.bittersweet,
                             fontWeight: FontWeight.w600)),
@@ -83,16 +85,16 @@ class _MyArticlePageState extends State<ArticlePage> {
                   SvgAssets.eyeSvg,
                   Container(
                     margin: EdgeInsets.only(right: 18.67),
-                    child: Text("100"),
+                    child: Text(controller.getViews()),
                   ),
                   SvgAssets.likeSvg,
                   Container(
                     margin: EdgeInsets.only(right: 18.67),
-                    child: Text("100"),
+                    child: Text(controller.getLikes()),
                   ),
                   SvgAssets.commentSvg,
                   Container(
-                    child: Text("200"),
+                    child: Text(controller.getComments()),
                   ),
                 ],
               ),
@@ -105,12 +107,14 @@ class _MyArticlePageState extends State<ArticlePage> {
                     margin: EdgeInsets.only(left: 17, right: 8),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(24),
-                      child: Image(
+                      child:
+                      CachedNetworkImage(
                         height: 32,
                         width: 32,
-                        image: NetworkImage(
-                            "https://upload.wikimedia.org/wikipedia/en/thumb/f/ff/BBC_News.svg/1200px-BBC_News.svg.png"),
                         fit: BoxFit.cover,
+                        imageUrl: controller.article.author.avatar,
+                        placeholder: (context, url) => new CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => new Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -120,13 +124,13 @@ class _MyArticlePageState extends State<ArticlePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text("bbc",
+                          child: Text(controller.article.author.name,
                               style: TextStyles.textStyleSourceSansPro14(
                                   fontWeight: FontWeight.w600)),
                         ),
                         Spacer(),
                         Container(
-                          child: Text("8 days ago",
+                          child: Text(controller.timeAgo(),
                               style: TextStyles.textStyleSourceSansPro8(
                                   fontWeight: FontWeight.w600)),
                         ),
@@ -145,7 +149,7 @@ class _MyArticlePageState extends State<ArticlePage> {
                             CustomColors.bittersweet),
                       ),
                       onPressed: () {
-                        print("null function");
+                        print("follow function");
                       },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -180,10 +184,17 @@ class _MyArticlePageState extends State<ArticlePage> {
             Container(
               margin: EdgeInsets.only(top: 16,left: 17, right: 15),
               child: Text(
-                  "Biden will wait for Congress to return before taking any major steps on US-Saudi relationship, national security adviser says\r\nBiden will wait for Congress to return before taking any major steps on US-Saudi relationship, national security adviser says",
+                  controller.article.content,
                   style: TextStyles.textStyleSourceSansPro12(
                       fontWeight: FontWeight.w400)),
             ),
+
+            Container(
+              margin: EdgeInsets.only(top: 42),
+              child: Wrap(
+                children: controller.getTags(),
+              ),
+            )
 
           ],
         ),

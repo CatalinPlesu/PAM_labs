@@ -28,8 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'News app',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      // home: const HomePage(),
-      home: const ArticlePage(),
+      home: const HomePage(),
     );
   }
 }

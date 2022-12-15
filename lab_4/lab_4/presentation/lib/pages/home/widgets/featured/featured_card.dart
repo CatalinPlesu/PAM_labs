@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domain/models/featured.dart';
 import 'package:domain/use_cases/get_articles_from_api_use_case.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,12 +23,14 @@ class FeaturedCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(24),
-            child: Image(
+            child:
+            CachedNetworkImage(
               height: 252,
               width: 310,
-              image: NetworkImage(
-                  featured.cover),
-                fit: BoxFit.cover,
+              fit: BoxFit.cover,
+              imageUrl: featured.cover,
+              placeholder: (context, url) => new CircularProgressIndicator(),
+              errorWidget: (context, url, error) => new Icon(Icons.error),
             ),
           ),
           Positioned.fill(child: ClipRRect(
@@ -56,7 +59,6 @@ class FeaturedCard extends StatelessWidget {
               height: 36,
               child: TextButton(
                 onPressed: () async {
-                  controller.openArticle(1);
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: CustomColors.geraldine, // Background Color

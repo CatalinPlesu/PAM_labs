@@ -25,6 +25,8 @@ class Article{
   String content;
   String image;
   int views_count;
+  int likes_count;
+  int comments_count;
   bool is_featured;
-  Article(this.id, this.author, this.category, this.tags, this.description, this.content, this.image, this.views_count, this.is_featured);
+  Article(this.id, this.author, this.category, this.tags, this.description, this.content, this.image, this.views_count, this.likes_count, this.comments_count, this.is_featured);
 }
