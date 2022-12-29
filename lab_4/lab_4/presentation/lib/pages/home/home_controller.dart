@@ -3,6 +3,7 @@ import 'package:domain/models/featured.dart';
 import 'package:domain/models/news.dart';
 import 'package:domain/use_cases/get_articles_from_api_use_case.dart';
 import 'package:domain/use_cases/get_articles_stream_use_%20case.dart';
+import 'package:domain/use_cases/get_articles_use_case.dart';
 import 'package:domain/use_cases/get_featured_from_json_use_case.dart';
 import 'package:domain/use_cases/get_news_from_json_use_case.dart';
 import 'package:get/get.dart';
@@ -24,6 +25,7 @@ class HomeController extends GetxController{
 
   var getArticlesUseCase = GetIt.instance.get<GetArticlesFromApiUseCase>();
   var getArticlesStream = GetIt.instance.get<GetArticlesStreamUseCase>();
+  var getArticlesUC= GetIt.instance.get<GetArticlesUseCase>();
   var getFeatured = GetIt.instance.get<GetFeaturedFromJsonUseCase>();
   var getNews = GetIt.instance.get<GetNewsFromJsonUseCase>();
 
@@ -34,12 +36,16 @@ class HomeController extends GetxController{
   }
 
 void getArticles() async {
-      getArticlesStream.call(page, limit).listen((articles) {
-        articleList.addAll(articles);
-        page++;
-        if (articles.length == limit ) {
-          canGetMoreData = true;
+    getArticlesUC.call(page, limit).then((articles) {
+    // getArticlesUseCase.call(page, limit).then((articles) {
+    // getArticlesStream.call(page, limit).listen((articles) {
+
+        canGetMoreData = true;
+        if (articles.length == articleList.value.length) {
+          canGetMoreData = false;
         }
+        articleList.value = articles;
+        page++;
     });
   }
 

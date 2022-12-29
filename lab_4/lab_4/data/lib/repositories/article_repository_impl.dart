@@ -32,4 +32,11 @@ class ArticleRepositoryImpl implements ArticleRepository {
     return articlesDbDataSource
         .getArticlesStream()
         .map((articles) => articles.map((e) => ArticleMapper().mapDbToModel(e)).toList());  }
+
+  @override
+  Future<List<Article>> getArticles() async {
+    var articles = await articlesDbDataSource.getArticles();
+    return   articles.map((e) => ArticleMapper().mapDbToModel(e)).toList();
+  }
+
 }

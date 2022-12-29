@@ -8,4 +8,6 @@ abstract class ArticleRepository {
   Future<void> insertArticlesDb(List<Article> articles);
 
   Stream<List<Article>> getArticlesStream();
+
+  Future<List<Article>> getArticles();
 }
